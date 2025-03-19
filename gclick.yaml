@@ -1,0 +1,335 @@
+swagger: "2.0"
+info:
+  description: "Documentação da API para Integração do Glick com Chat Cloud Comunicação [https://chat.cloudcom.com.br](https://chat.cloudcom.com.br)"
+  version: "1.0.0"
+  title: "API GCLICK CLOUDCOM - API v1.0"
+  contact:
+    email: "suporte@cloudcom.com.br"
+host: "api.gclick.cloudcom.com.br"
+basePath: ""
+tags:
+- name: "chat pbx cloudcom"
+  description: "Rotas do webservice para integração do Gclick com o Chat CloudCom"
+schemes:
+- "https"
+paths:
+  /user/:id/accounts/:account_id:
+    get:
+      tags:
+      - "user"
+      summary: "Busca um usuário pelo ID"
+      description: "Rota utilizada buscar os dados de um usuário pelo ID"
+      operationId: "showUser"
+      produces:
+      - application/json
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "ID do usuário"
+          required: true
+          type: "integer"
+          format: "int64"
+        - name: "account_id"
+          in: "path"
+          description: "ID da conta"
+          required: true
+          type: "integer"
+          format: "int64"
+      responses:
+        200:
+          description: "Operação realizada com sucesso"
+          schema:
+            $ref: "#/definitions/User"
+        404:
+          description: "Usuário não encontrado"
+      security:
+        - bearerAuth: []
+  /contact/:id/accounts/:account_id:
+    get:
+      tags:
+      - "contact"
+      summary: "Busca um contato pelo ID"
+      description: "Rota utilizada buscar os dados de um contato pelo ID"
+      operationId: "showContact"
+      produces:
+      - application/json
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "ID do contato"
+          required: true
+          type: "integer"
+          format: "int64"
+        - name: "account_id"
+          in: "path"
+          description: "ID da conta"
+          required: true
+          type: "integer"
+          format: "int64"
+      responses:
+        200:
+          description: "Operação realizada com sucesso"
+          schema:
+            $ref: "#/definitions/Contact"
+        404:
+          description: "Contato não encontrado"
+      security:
+        - bearerAuth: []
+  /conversations/accounts/:account_id:
+    get:
+      tags:
+      - "conversation"
+      summary: "Lista as conversas"
+      description: "Rota utilizada para listar as conversas dependo do filtro utilizado"
+      operationId: "listConversations"
+      produces:
+      - application/json
+      parameters:
+        - name: "account_id"
+          in: "path"
+          description: "ID da conta"
+          required: true
+          type: "integer"
+          format: "int64"
+        - name: "assignee_type"
+          in: "query"
+          description: "Tipo de atribuição"
+          required: false
+          type: "string"
+          default: "all"
+          enum:
+            - "me"
+            - "unassigned"
+            - "all"
+            - "assigned"
+        - name: "status"
+          in: "query"
+          description: "Status da conversa"
+          required: false
+          type: "string"
+          default: "open"
+          enum:
+            - "all"
+            - "open"
+            - "resolved"
+            - "pending"
+            - "snoozed"
+        - name: "q"
+          in: "query"
+          description: "Filtro de busca"
+          required: false
+          type: "string"
+        - name: "inbox_id"
+          in: "query"
+          description: "ID da caixa de entrada"
+          required: false
+          type: "integer"
+          format: "int64"
+        - name: "team_id"
+          in: "query"
+          description: "ID da equipe"
+          required: false
+          type: "integer"
+          format: "int64"
+        - name: "labels"
+          in: "query"
+          description: "Filtro de etiquetas, Array of strings"
+          required: false
+          type: "string"
+        - name: "page"
+          in: "query"
+          description: "Número da página"
+          required: false
+          type: "integer"
+          format: "int64"
+      responses:
+        200:
+          description: "Operação realizada com sucesso"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Conversation"
+      security:
+        - bearerAuth: []
+  /messages/accounts/:account_id/conversations/:conversation_id:
+    get:
+      tags:
+      - "messages"
+      summary: "Exibe as mensagens de uma conversa"
+      description: "Rota utilizada para listar as mensagens de uma conversa"
+      operationId: "listConversationMessages"
+      produces:
+      - application/json
+      parameters:
+        - name: "account_id"
+          in: "path"
+          description: "ID da conta"
+          required: true
+          type: "integer"
+          format: "int64"
+        - name: "conversation_id"
+          in: "path"
+          description: "ID da conversa"
+          required: true
+          type: "integer"
+          format: "int64"
+        - name: "page"
+          in: "query"
+          description: "Número da página"
+          required: false
+          type: "integer"
+          format: "int64"
+      responses:
+        200:
+          description: "Operação realizada com sucesso"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Message"
+      security:
+        - bearerAuth: []
+  /messages/accounts/:account_id/sendMessage:
+    post:
+      tags:
+      - "message"
+      summary: "Envia mensagem de texto para o numero de um contato"
+      description: "Rota utilizada para enviar mensagem de texto para o numero de um contato"
+      operationId: "sendMessage"
+      produces:
+      - application/json
+      parameters:
+        - name: "account_id"
+          in: "path"
+          description: "ID da conta"
+          required: true
+          type: "integer"
+        - name: "destination"
+          in: "body"
+          description: "Numero de destino do contato"
+          required: true
+          type: "string"
+        - name: "message"
+          in: "body"
+          description: "Mensagem de texto"
+          required: true
+          type: "string"
+      responses:
+        200:
+          description: "Operação realizada com sucesso"
+          schema:
+            $ref: "#/definitions/Message"
+      security:
+        - bearerAuth: []
+  /messages/accounts/:account_id/sendFile:
+    post:
+      tags:
+      - "message"
+      summary: "Envia arquivo para o numero de um contato"
+      description: "Rota utilizada para enviar arquivo para o numero de um contato"
+      operationId: "sendFile"
+      produces:
+      - application/json
+      consumes:
+        - multipart/form-data
+      parameters:
+        - name: "account_id"
+          in: "path"
+          description: "ID da conta"
+          required: true
+          type: "integer"
+          format: "int64"
+        - in: formData
+          name: "destination"
+          description: "Numero de destino do contato"
+          required: true
+          type: "string"
+        - in: formData
+          name: "file"
+          description: "Arquivo a ser enviado"
+          required: true
+          type: "file"
+      responses:
+        200:
+          description: "Operação realizada com sucesso"
+          schema:
+            $ref: "#/definitions/Message"
+      security:
+        - bearerAuth: []
+
+securityDefinitions:
+  bearerAuth:
+    type: apiKey
+    in: header
+    name: Authorization
+    description: Enter the token with the `Bearer ` prefix, e.g. "Bearer abcde12345".
+    value: 'Bearer <token>'
+
+definitions:
+  User:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      name:
+        type: "string"
+      email:
+        type: "string"
+      phone:
+        type: "string"
+  Contact:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      name:
+        type: "string"
+      email:
+        type: "string"
+      phone:
+        type: "string"
+  Conversation:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      status:
+        type: "string"
+      assignee:
+        type: "string"
+      assignee_type:
+        type: "string"
+      inbox_id:
+        type: "integer"
+        format: "int64"
+      team_id:
+        type: "integer"
+        format: "int64"
+      labels:
+        type: "array"
+        items:
+          type: "string"
+  Message:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      conversation_id:
+        type: "integer"
+        format: "int64"
+      sender:
+        type: "string"
+      recipient:
+        type: "string"
+      content:
+        type: "string"
+      type:
+        type: "string"
+      status:
+        type: "string"
+      created_at:
+        type: "string"
+        format: "date-time"
