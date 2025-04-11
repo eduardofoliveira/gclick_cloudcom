@@ -7,12 +7,14 @@ type InputSendMessage = {
   destination: number
   message: string
   account_id: number
+  inbox_id: number
 }
 
 const execute = async ({
   account_id,
   destination,
   message,
+  inbox_id,
 }: InputSendMessage) => {
   const findConversations = await Conversation.findConversation({
     accountId: account_id,
@@ -43,7 +45,7 @@ const execute = async ({
   const { id } = await api.createConversation({
     account_id: account_id.toString(),
     contact_id: contactExists[0].id.toString(),
-    inbox_id: "4",
+    inbox_id: inbox_id.toString(),
   })
 
   const { data } = await api.sendMessage({

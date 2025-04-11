@@ -7,6 +7,7 @@ type InputSendMessage = {
   destination: number
   file: Express.Multer.File
   account_id: number
+  inbox_id: number
 }
 
 const execute = async ({ account_id, destination, file }: InputSendMessage) => {
@@ -39,7 +40,7 @@ const execute = async ({ account_id, destination, file }: InputSendMessage) => {
   const { id } = await api.createConversation({
     account_id: account_id.toString(),
     contact_id: contactExists[0].id.toString(),
-    inbox_id: "4",
+    inbox_id: account_id.toString(),
   })
 
   const data = await api.sendFile({
