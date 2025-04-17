@@ -3,7 +3,9 @@ import type { Request, Response } from "express"
 import showContact from "../use-cases/contact/showContact"
 
 const show = async (req: Request, res: Response): Promise<any> => {
-  const { id, account_id } = req.params
+  const { id } = req.params
+  const { fk_id_account } = req
+  const account_id = fk_id_account as string
 
   const contact = await showContact({
     id: Number.parseInt(id, 10),

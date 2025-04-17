@@ -14,39 +14,39 @@ import { validateAccountIdSchema } from "../schemas/accountIDSchema"
 const router = Router()
 
 router.get(
-  "/user/:id/accounts/:account_id",
+  "/user/:id",
   validateAccountId,
   validateParamsData(searchByIDSchema),
   validateParamsData(validateAccountIdSchema),
   userController.show,
 )
 router.get(
-  "/contact/:id/accounts/:account_id",
+  "/contact/:id",
   validateAccountId,
   validateParamsData(searchByIDSchema),
   validateParamsData(validateAccountIdSchema),
   ContactController.show,
 )
 router.get(
-  "/conversations/accounts/:account_id",
+  "/conversations",
   validateAccountId,
   validateParamsData(validateAccountIdSchema),
   ConversationController.index,
 )
 router.get(
-  "/messages/accounts/:account_id/conversations/:conversation_id",
+  "/messages/conversations/:conversation_id",
   validateAccountId,
   validateParamsData(validateAccountIdSchema),
   MessageController.show,
 )
 router.post(
-  "/messages/accounts/:account_id/sendMessage",
+  "/messages/sendMessage",
   validateAccountId,
   validateParamsData(validateAccountIdSchema),
   MessageController.store,
 )
 router.post(
-  "/messages/accounts/:account_id/sendFile",
+  "/messages/sendFile",
   upload.single("file"),
   validateAccountId,
   validateParamsData(validateAccountIdSchema),

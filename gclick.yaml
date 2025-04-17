@@ -13,7 +13,7 @@ tags:
 schemes:
 - "https"
 paths:
-  /user/:id/accounts/:account_id:
+  /user/:id:
     get:
       tags:
       - "user"
@@ -29,12 +29,6 @@ paths:
           required: true
           type: "integer"
           format: "int64"
-        - name: "account_id"
-          in: "path"
-          description: "ID da conta"
-          required: true
-          type: "integer"
-          format: "int64"
       responses:
         200:
           description: "Operação realizada com sucesso"
@@ -44,7 +38,7 @@ paths:
           description: "Usuário não encontrado"
       security:
         - bearerAuth: []
-  /contact/:id/accounts/:account_id:
+  /contact/:id:
     get:
       tags:
       - "contact"
@@ -60,12 +54,6 @@ paths:
           required: true
           type: "integer"
           format: "int64"
-        - name: "account_id"
-          in: "path"
-          description: "ID da conta"
-          required: true
-          type: "integer"
-          format: "int64"
       responses:
         200:
           description: "Operação realizada com sucesso"
@@ -75,7 +63,7 @@ paths:
           description: "Contato não encontrado"
       security:
         - bearerAuth: []
-  /conversations/accounts/:account_id:
+  /conversations:
     get:
       tags:
       - "conversation"
@@ -85,12 +73,6 @@ paths:
       produces:
       - application/json
       parameters:
-        - name: "account_id"
-          in: "path"
-          description: "ID da conta"
-          required: true
-          type: "integer"
-          format: "int64"
         - name: "assignee_type"
           in: "query"
           description: "Tipo de atribuição"
@@ -151,7 +133,7 @@ paths:
               $ref: "#/definitions/Conversation"
       security:
         - bearerAuth: []
-  /messages/accounts/:account_id/conversations/:conversation_id:
+  /messages/conversations/:conversation_id:
     get:
       tags:
       - "messages"
@@ -161,12 +143,6 @@ paths:
       produces:
       - application/json
       parameters:
-        - name: "account_id"
-          in: "path"
-          description: "ID da conta"
-          required: true
-          type: "integer"
-          format: "int64"
         - name: "conversation_id"
           in: "path"
           description: "ID da conversa"
@@ -188,7 +164,7 @@ paths:
               $ref: "#/definitions/Message"
       security:
         - bearerAuth: []
-  /messages/accounts/:account_id/sendMessage:
+  /messages/sendMessage:
     post:
       tags:
       - "message"
@@ -198,11 +174,6 @@ paths:
       produces:
       - application/json
       parameters:
-        - name: "account_id"
-          in: "path"
-          description: "ID da conta"
-          required: true
-          type: "integer"
         - name: "destination"
           in: "body"
           description: "Numero de destino do contato"
@@ -220,7 +191,7 @@ paths:
             $ref: "#/definitions/Message"
       security:
         - bearerAuth: []
-  /messages/accounts/:account_id/sendFile:
+  /messages/sendFile:
     post:
       tags:
       - "message"
@@ -232,12 +203,6 @@ paths:
       consumes:
         - multipart/form-data
       parameters:
-        - name: "account_id"
-          in: "path"
-          description: "ID da conta"
-          required: true
-          type: "integer"
-          format: "int64"
         - in: formData
           name: "destination"
           description: "Numero de destino do contato"

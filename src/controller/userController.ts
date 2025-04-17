@@ -5,7 +5,9 @@ import showAccountUserByUserId from "../use-cases/accountUser/showAccountUserByU
 import { getUserDTO } from "../dtos/getUserDTO"
 
 const show = async (req: Request, res: Response): Promise<any> => {
-  const { id, account_id } = req.params
+  const { id } = req.params
+  const { fk_id_account } = req
+  const account_id = fk_id_account as string
 
   await showAccountUserByUserId({
     user_id: Number.parseInt(id, 10),

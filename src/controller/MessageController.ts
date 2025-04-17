@@ -6,7 +6,9 @@ import sendFile from "../use-cases/message/sendFile"
 
 const show = async (req: Request, res: Response): Promise<any> => {
   try {
-    const { account_id, conversation_id } = req.params
+    const { conversation_id } = req.params
+    const { fk_id_account } = req
+    const account_id = fk_id_account as string
 
     const { data } = await axios.get(
       `https://chatwoot.cloudcom.com.br/api/v1/accounts/${account_id}/conversations/${conversation_id}/messages`,
@@ -39,7 +41,8 @@ const accountInbox = [
 ]
 
 const store = async (req: Request, res: Response): Promise<any> => {
-  const { account_id } = req.params
+  const { fk_id_account } = req
+  const account_id = fk_id_account as string
   const { destination, message } = req.body
 
   const account = accountInbox.find(
@@ -61,8 +64,9 @@ const store = async (req: Request, res: Response): Promise<any> => {
 }
 
 const storeFile = async (req: Request, res: Response): Promise<any> => {
-  const { account_id } = req.params
   const { destination } = req.body
+  const { fk_id_account } = req
+  const account_id = fk_id_account as string
 
   const account = accountInbox.find(
     (account) => account.account_id === Number.parseInt(account_id, 10),

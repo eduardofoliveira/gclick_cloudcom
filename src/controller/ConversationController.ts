@@ -3,7 +3,8 @@ import axios from "axios"
 
 const index = async (req: Request, res: Response): Promise<any> => {
   try {
-    const { account_id } = req.params
+    const { fk_id_account } = req
+    const account_id = fk_id_account as string
     const { assignee_type, status, q, inbox_id, team_id, labels, page } =
       req.query
 
