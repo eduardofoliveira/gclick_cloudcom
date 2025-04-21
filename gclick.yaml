@@ -179,6 +179,11 @@ paths:
           description: "Numero de destino do contato"
           required: true
           type: "string"
+        - in: formData
+          name: 'inbox_id'
+          description: "ID da caixa de entrada"
+          required: true
+          type: "integer"
         - name: "message"
           in: "body"
           description: "Mensagem de texto"
@@ -209,6 +214,11 @@ paths:
           required: true
           type: "string"
         - in: formData
+          name: 'inbox_id'
+          description: "ID da caixa de entrada"
+          required: true
+          type: "integer"
+        - in: formData
           name: "file"
           description: "Arquivo a ser enviado"
           required: true
@@ -220,6 +230,23 @@ paths:
             $ref: "#/definitions/Message"
       security:
         - bearerAuth: []
+  /inbox:
+    get:
+      tags:
+      - "inbox"
+      summary: "Lista as caixas de entrada"
+      description: "Rota utilizada para listar as caixas de entrada"
+      operationId: "listInboxes"
+      produces:
+      - application/json
+      responses:
+        200:
+          description: "Operação realizada com sucesso"
+          schema:
+            $ref: "#/definitions/Inboxes"
+      security:
+        - bearerAuth: []
+
 
 securityDefinitions:
   bearerAuth:
@@ -276,6 +303,16 @@ definitions:
         type: "array"
         items:
           type: "string"
+  Inboxes:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      name:
+        type: "string"
+      channel_type:
+        type: "string"
   Message:
     type: "object"
     properties:

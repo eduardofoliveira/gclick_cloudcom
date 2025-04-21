@@ -41,6 +41,24 @@ class ApiChatwoot {
     return ApiChatwoot.instance
   }
 
+  public async listInboxes({
+    account_id,
+  }: {
+    account_id: string
+  }): Promise<any> {
+    const options = {
+      method: "GET",
+      url: `/accounts/${account_id}/inboxes`,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+
+    const { data } = await this.localAxios.request(options)
+
+    return data.payload
+  }
+
   public async sendFile({
     account_id,
     conversation_id,

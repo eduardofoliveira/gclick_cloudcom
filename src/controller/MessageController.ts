@@ -25,62 +25,62 @@ const show = async (req: Request, res: Response): Promise<any> => {
   }
 }
 
-const accountInbox = [
-  {
-    account_id: 11,
-    inbox_id: 42,
-  },
-  {
-    account_id: 1,
-    inbox_id: 4,
-  },
-  {
-    account_id: 10,
-    inbox_id: 39,
-  },
-]
+// const accountInbox = [
+//   {
+//     account_id: 11,
+//     inbox_id: 42,
+//   },
+//   {
+//     account_id: 1,
+//     inbox_id: 4,
+//   },
+//   {
+//     account_id: 10,
+//     inbox_id: 39,
+//   },
+// ]
 
 const store = async (req: Request, res: Response): Promise<any> => {
   const { fk_id_account } = req
   const account_id = fk_id_account as string
-  const { destination, message } = req.body
+  const { destination, message, inbox_id } = req.body
 
-  const account = accountInbox.find(
-    (account) => account.account_id === Number.parseInt(account_id, 10),
-  )
+  // const account = accountInbox.find(
+  //   (account) => account.account_id === Number.parseInt(account_id, 10),
+  // )
 
-  if (!account) {
-    return res.status(404).json({ error: "Account not found" })
-  }
+  // if (!account) {
+  //   return res.status(404).json({ error: "Account not found" })
+  // }
 
   const result = await sendMessage({
     account_id: Number.parseInt(account_id, 10),
     destination,
     message,
-    inbox_id: account.inbox_id,
+    inbox_id,
   })
 
   return res.json(result)
 }
 
 const storeFile = async (req: Request, res: Response): Promise<any> => {
-  const { destination } = req.body
+  const { destination, inbox_id } = req.body
   const { fk_id_account } = req
   const account_id = fk_id_account as string
 
-  const account = accountInbox.find(
-    (account) => account.account_id === Number.parseInt(account_id, 10),
-  )
+  // const account = accountInbox.find(
+  //   (account) => account.account_id === Number.parseInt(account_id, 10),
+  // )
 
-  if (!account) {
-    return res.status(404).json({ error: "Account not found" })
-  }
+  // if (!account) {
+  //   return res.status(404).json({ error: "Account not found" })
+  // }
 
   const result = await sendFile({
     account_id: Number.parseInt(account_id, 10),
     destination,
     file: req.file as Express.Multer.File,
-    inbox_id: account.inbox_id,
+    inbox_id,
   })
 
   return res.json(result)
