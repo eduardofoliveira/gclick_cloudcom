@@ -8,9 +8,11 @@ import ContactController from "../controller/ContactController"
 import ConversationController from "../controller/ConversationController"
 import MessageController from "../controller/MessageController"
 import { validateParamsData } from "../middleware/validationParamsMiddleware"
-import validateAccountId from "../middleware/validateAccountId"
+import { validateBodyData } from "../middleware/validationBodyMiddleware"
+// import validateAccountId from "../middleware/validateAccountId"
 import { searchByIDSchema } from "../schemas/userSchemas"
-import { validateAccountIdSchema } from "../schemas/accountIDSchema"
+// import { validateAccountIdSchema } from "../schemas/accountIDSchema"
+import { validateInboxIdSchema } from "../schemas/inboxIdSchema"
 
 const router = Router()
 
@@ -42,6 +44,7 @@ router.get(
 )
 router.post(
   "/messages/sendMessage",
+  validateBodyData(validateInboxIdSchema),
   // validateAccountId,
   // validateParamsData(validateAccountIdSchema),
   MessageController.store,
@@ -49,6 +52,7 @@ router.post(
 router.post(
   "/messages/sendFile",
   upload.single("file"),
+  validateBodyData(validateInboxIdSchema),
   // validateAccountId,
   // validateParamsData(validateAccountIdSchema),
   MessageController.storeFile,
