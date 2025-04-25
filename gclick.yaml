@@ -170,6 +170,43 @@ paths:
           description: "Conversa não encontrada"
       security:
         - bearerAuth: []
+  /messages/contact/:contact_id:
+    get:
+      tags:
+      - "messages"
+      summary: "Exibe as mensagens de um contato"
+      description: "Rota utilizada para listar as mensagens de um contato"
+      operationId: "listContactMessages"
+      produces:
+      - application/json
+      parameters:
+        - name: "contact_id"
+          in: "path"
+          description: "ID do contato"
+          required: true
+          type: "integer"
+          format: "int64"
+        - name: "start"
+          in: "query"
+          description: "Data inicial da busca"
+          required: true
+          type: "date"
+          format: "YYYY-MM-DD HH:mm:ss"
+        - name: "end"
+          in: "query"
+          description: "Data final da busca"
+          required: true
+          type: "date"
+          format: "YYYY-MM-DD HH:mm:ss"
+      responses:
+        200:
+          description: "Operação realizada com sucesso"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Message"
+      security:
+        - bearerAuth: []
   /messages/conversations/:conversation_id:
     get:
       tags:

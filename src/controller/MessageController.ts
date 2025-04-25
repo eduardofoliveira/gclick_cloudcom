@@ -119,9 +119,80 @@ const storeFile = async (req: Request, res: Response): Promise<any> => {
   return res.json(result)
 }
 
+const showAllMessagesByContact = async (
+  req: Request,
+  res: Response,
+): Promise<any> => {
+  const { contact_id } = req.params
+  const { start, end } = req.query
+  const { fk_id_account } = req
+  const account_id = fk_id_account as string
+
+  // validar start e end com zod
+  const schema = z.object({
+    start: z.string().refine((val) => !Number.isNaN(Date.parse(val)), {
+      message:
+        "Invalid date, field start is required, format: YYYY-MM-DD HH:mm:ss",
+    }),
+    end: z.string().refine((val) => !Number.isNaN(Date.parse(val)), {
+      message:
+        "Invalid date, field end is required, format: YYYY-MM-DD HH:mm:ss",
+    }),
+  })
+
+  schema.parse({
+    start,
+    end,
+  })
+
+  const { data: conversations } = await axios.get(
+    `https://chatwoot.cloudcom.com.br/api/v1/accounts/${account_id}/contacts/${contact_id}/conversations`,
+    {
+      headers: {
+        api_access_token: process.env.TOKEN_CHATWOOT,
+      },
+    },
+  )
+
+  const returnMessages = []
+  for await (const conversation of conversations.payload) {
+    const { data: messages } = await axios.get(
+      `https://chatwoot.cloudcom.com.br/api/v1/accounts/${account_id}/conversations/${conversation.id}/messages`,
+      {
+        headers: {
+          api_access_token: process.env.TOKEN_CHATWOOT,
+        },
+      },
+    )
+
+    const dataInicio = new Date(start as string)
+    const dataFim = new Date(end as string)
+
+    const filteredMessages = messages.payload.filter((item: any) => {
+      const dataMensagem = new Date(item.created_at * 1000)
+      return isBetweenDates(dataMensagem, dataInicio, dataFim)
+    })
+
+    returnMessages.push(...filteredMessages)
+  }
+
+  const messagesOrdered = returnMessages.sort((a: any, b: any) => {
+    if (a.created_at > b.created_at) {
+      return -1
+    }
+    if (a.created_at < b.created_at) {
+      return 1
+    }
+    return 0
+  })
+
+  return res.json(messagesOrdered)
+}
+
 export default {
   show,
   showByContact,
+  showAllMessagesByContact,
   store,
   storeFile,
 }

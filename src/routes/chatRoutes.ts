@@ -41,6 +41,10 @@ router.get(
   MessageController.showByContact,
 )
 router.get(
+  "/messages/contact/:contact_id",
+  MessageController.showAllMessagesByContact,
+)
+router.get(
   "/messages/conversations/:conversation_id",
   // validateAccountId,
   // validateParamsData(validateAccountIdSchema),
