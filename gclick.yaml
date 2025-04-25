@@ -133,6 +133,43 @@ paths:
               $ref: "#/definitions/Conversation"
       security:
         - bearerAuth: []
+  /conversations/contact/:contact_id:
+    get:
+      tags:
+      - "conversation"
+      summary: "Busca as conversas pelo ID do contato"
+      description: "Rota utilizada lista as conversas de um contato pelo ID"
+      operationId: "showContactConversation"
+      produces:
+      - application/json
+      parameters:
+        - name: "contact_id"
+          in: "path"
+          description: "ID do contato"
+          required: true
+          type: "integer"
+          format: "int64"
+        - name: "start"
+          in: "query"
+          description: "Data inicial da busca"
+          required: true
+          type: "date"
+          format: "YYYY-MM-DD HH:mm:ss"
+        - name: "end"
+          in: "query"
+          description: "Data final da busca"
+          required: true
+          type: "date"
+          format: "YYYY-MM-DD HH:mm:ss"
+      responses:
+        200:
+          description: "Operação realizada com sucesso"
+          schema:
+            $ref: "#/definitions/Conversation"
+        404:
+          description: "Conversa não encontrada"
+      security:
+        - bearerAuth: []
   /messages/conversations/:conversation_id:
     get:
       tags:

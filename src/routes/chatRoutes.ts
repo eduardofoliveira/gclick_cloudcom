@@ -37,6 +37,10 @@ router.get(
   ConversationController.index,
 )
 router.get(
+  "/conversations/contact/:contact_id",
+  MessageController.showByContact,
+)
+router.get(
   "/messages/conversations/:conversation_id",
   // validateAccountId,
   // validateParamsData(validateAccountIdSchema),
